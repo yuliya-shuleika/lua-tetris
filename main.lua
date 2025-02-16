@@ -1,5 +1,10 @@
 json = require("json")
 
+rectangle_size = 40
+grid_width = 400
+grid_height = 800
+padding = 2
+
 shapes = {
     {{1, 1, 1, 1}},
     {{1, 1}, {1, 1}},
@@ -23,7 +28,7 @@ end
 
 function love.load()
     love.window.setTitle("Tetris")
-    love.window.setMode(300, 600)
+    love.window.setMode(grid_width, grid_height)
     
     if love.filesystem.getInfo("savegame.txt") then
         restoreGame()
@@ -175,7 +180,7 @@ function love.draw()
                 end
 
                 love.graphics.setColor(1, 1, 1, alpha)
-                love.graphics.rectangle("fill", (x - 1) * 30, (y - 1) * 30, 28, 28)
+                drawBlock(x, y)
             end
         end
     end
@@ -185,10 +190,14 @@ function love.draw()
     for i, row in ipairs(currentPiece.shape) do
         for j, cell in ipairs(row) do
             if cell == 1 then
-                love.graphics.rectangle("fill", (currentPiece.x + j - 2) * 30, (currentPiece.y + i - 2) * 30, 28, 28)
+                drawBlock(currentPiece.x + j - 1, currentPiece.y + i - 1)
             end
         end
     end
+end
+
+function drawBlock(x, y)
+    love.graphics.rectangle("fill", (x - 1) * rectangle_size, (y - 1) * rectangle_size, rectangle_size-padding, rectangle_size - padding)
 end
 
 function love.keypressed(key)
